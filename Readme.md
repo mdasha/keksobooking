@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Дарья Словецких](https://up.htmlacademy.ru/javascript/9/user/3612).
-* Наставник: `Неизвестно`.
+* Наставник: `Святослав Комаров`.
 
 ---
 
