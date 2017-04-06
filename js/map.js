@@ -69,7 +69,7 @@ var renderOfferInDialogPanel = function (offer) {
   offerElement.querySelector('.lodge__title').textContent = offer.title;
   offerElement.querySelector('.lodge__address').textContent = offer.address;
   // Знак рубля у меня не отображается
-  offerElement.querySelector('.lodge__price').textContent = offer.price + '&#x20bd;/ночь';
+  offerElement.querySelector('.lodge__price').innerHTML = offer.price + '&#x20bd;/ночь';
   var offerType = offer.type;
   // Заменяем flat на Квартира, bungalo на Бунгало, house на Дом
   switch (offerType) {
@@ -96,10 +96,40 @@ var renderOfferInDialogPanel = function (offer) {
   return offerElement;
 };
 
+var openUserDialog = function (e) {
+  var child = e.currentTarget;
+  var parent = child.parentNode;
+  var index = Array.prototype.indexOf.call(parent.children, child);
 // Удаляем заполненный элемент dialog__panel
-offerDialog[0].removeChild(dialogPanel[0]);
+
+var oldElement = offerDialog[0].removeChild(dialogPanel[0]);
+var NewElement = fragment.appendChild(renderOfferInDialogPanel(similarNotesNearby[index - 1].offer));
+var NewElement = offerDialog[0].appendChild(fragment);
+
 // Добавляем вновь созданный элемент dialog__panel
-fragment.appendChild(renderOfferInDialogPanel(similarNotesNearby[0].offer));
-offerDialog[0].appendChild(fragment);
+
+
 // Заменяем src у аватарки пользователя — изображения, которое записано в .dialog__title — на значения поля author.avatar отрисовываемого объекта
-offerDialog[0].querySelector('.dialog__title img').src = similarNotesNearby[0].author.avatar;
+var NewImage = offerDialog[0].querySelector('.dialog__title img').src = similarNotesNearby[index - 1].author.avatar;
+
+
+}
+
+
+// Добавляем класс .pin-active выделенному элементу
+var pins = document.querySelectorAll('.pin');
+
+var toolbarButtonHandler = function(e) {
+  pins = e.currentTarget;
+  pins.classList.add('pin--active');
+
+};
+// Убираем со всех элементов класс .pin-active
+
+
+
+for(var i = 0; i < pins.length; i++) {
+
+  pins[i].addEventListener('click', toolbarButtonHandler);
+  pins[i].addEventListener('click', openUserDialog);    
+}
