@@ -16,6 +16,14 @@ var similarOfferTemplate = document.querySelector('#lodge-template').content;
 var offerDialog = document.querySelectorAll('#offer-dialog');
 var dialogClose = offerDialog[0].querySelector('.dialog__close');
 var dialogTitle = offerDialog[0].querySelectorAll('.dialog__title');
+var time = document.querySelector('#time');
+var timeOut = document.querySelector('#timeout');
+var type = document.querySelector('#type');
+var price = document.querySelector('#price');
+var roomNumber = document.querySelector('#room_number');
+var capacity = document.querySelector('#capacity');
+var formSubmit = document.querySelector('.form__submit');
+var title = document.querySelector('#title');
 // Создаем одно предложение
 function createSimilarNotesNearby(i) {
   var similarNoteNearby =
@@ -173,5 +181,66 @@ dialogClose.addEventListener('click', function () {
 dialogClose.addEventListener('keydown', function (evt) {
   if (evt.keyCode === 13) {
     deleteOfferCard();
+  }
+});
+// Зависимость полей въезда и выезда гостей. Если меняем поле заезда, то автоматически меняется поле выезда
+time.addEventListener('change', function (e) {
+  time = e.currentTarget;
+  timeOut.selectedIndex = time.selectedIndex;
+});
+// Зависимость полей въезда и выезда гостей. Если меняем поле выезда, то автоматически меняется поле заезда
+timeOut.addEventListener('change', function (e) {
+  timeOut = e.currentTarget;
+  time.selectedIndex = timeOut.selectedIndex;
+});
+// Синхронизируем значение поля "Тип жилья" с минимальной ценой
+type.addEventListener('change', function (e) {
+  type = e.currentTarget;
+  var selectedType = type.selectedIndex;
+  switch (selectedType) {
+    case 0:
+      price.setAttribute('min', '1000');
+      price.setAttribute('placeholder', '1000');
+      break;
+    case 1:
+      price.setAttribute('min', '0');
+      price.setAttribute('placeholder', '0');
+      break;
+    case 2:
+      price.setAttribute('min', '10000');
+      price.setAttribute('placeholder', '10000');
+      break;
+  }
+});
+// Связь между количеством комнат и количеством гостей. Если меняем поле с количеством комнат, то автоматически меняется поле количества гостей
+roomNumber.addEventListener('change', function (e) {
+  roomNumber = e.currentTarget;
+  var selectedIndexRoomNumber = roomNumber.selectedIndex;
+  switch (selectedIndexRoomNumber) {
+    case 0:
+      capacity.selectedIndex = 1;
+      break;
+    case 1:
+      capacity.selectedIndex = 0;
+      break;
+    case 2:
+      capacity.selectedIndex = 0;
+      break;
+  }
+});
+// Проверяем, правильно ли заполнены поля при отправке формы и сбрасываем значения на исходные после отправки формы
+formSubmit.addEventListener('click', function () {
+  price.setAttribute('placeholder', '');
+  if (title.value.length < 30 || title.value.length > 100) {
+    title.style.border = '3px solid red';
+    title.style.name = 'Заголовок должен быть длиной от 30 до 100 символов';
+  }
+  if (typeof (price) !== 'number' || price > 1000000 || price < 1000) {
+    price.style.border = '3px solid red';
+  } else {
+    price.setAttribute('placeholder', '1000');
+    type.selectedIndex = 0;
+    roomNumber.selectedIndex = 0;
+    time.selectedIndex = 0;
   }
 });
