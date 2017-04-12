@@ -1,121 +1,16 @@
 'use strict';
-// Функция генерации случайных данных - целых чисел в заданном диапазоне от min до max
-function rand(min, max) {
-  min = parseInt(min, 10);
-  max = parseInt(max, 10);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-var OFFER_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Уютное бунгало недалеко от моря', 'Неуютное бунгало по колено в воде', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик'];
-var OFFER_ADDRESSES = ['117285, Россия, Москва, ул. Тимура Фрунзе, 15-285', '115407, Россия, Москва, Нагатинская набережная, 32-185', '132158, Россия, Москва, ул. Братиславская, 17-85', '147528, Россия, Москва, ул. Лубянка, 1-1', '198523, Россия, Москва, Черноморский бульвар, 14-528', '165982, Россия, Москва, ул. Бакинских Комиссаров, 10-142', '165985, Россия, Москва, ул. Нижняя Красносельская, 42-152', '165986, Россия, Москва, ул. Бауманская, 42-58'];
-var OFFER_TYPES = ['flat', 'house', 'bungalo'];
-var OFFER_CHECKS = ['12:00', '13:00', '14:00'];
-var OFFER_FEATURES = 'wifi, dishwasher, parking, washer, elevator, conditioner';
-var firstMark = document.querySelector('.tokyo__pin-map');
-var similarOfferTemplate = document.querySelector('#lodge-template').content;
 var offerDialog = document.querySelectorAll('#offer-dialog');
 var dialogClose = offerDialog[0].querySelector('.dialog__close');
 var dialogTitle = offerDialog[0].querySelectorAll('.dialog__title');
-var time = document.querySelector('#time');
-var timeOut = document.querySelector('#timeout');
-var type = document.querySelector('#type');
-var price = document.querySelector('#price');
-var roomNumber = document.querySelector('#room_number');
-var capacity = document.querySelector('#capacity');
-var formSubmit = document.querySelector('.form__submit');
-var title = document.querySelector('#title');
-// Создаем одно предложение
-function createSimilarNotesNearby(i) {
-  var similarNoteNearby =
-    {
-      author: {
-        avatar: 'img/avatars/user0' + (i + 1) + '.png'
-      },
-      location: {
-        x: rand(300, 900),
-        y: rand(100, 500)
-      },
-      offer: {
-        title: OFFER_TITLES[i],
-        address: OFFER_ADDRESSES[i],
-        price: rand(1000, 1000000),
-        type: OFFER_TYPES[rand(0, 2)],
-        rooms: rand(1, 5),
-        guests: rand(1, 10),
-        checkin: OFFER_CHECKS[rand(0, 2)],
-        checkout: OFFER_CHECKS[rand(0, 2)],
-        features: OFFER_FEATURES.split(', ', rand(1, 6)),
-        description: '',
-        photos: ''
-      }
-    };
-  return similarNoteNearby;
-}
-
-// Создаем пустой массив предложений
-var similarNotesNearby = [];
-
-// Заполняем массив данными 8 сгенерированных JS-объектов
-for (var i = 0; i < 8; i++) {
-  similarNotesNearby.splice(i, 1, createSimilarNotesNearby(i));
-}
-// Заполнение блока DOM-элементами на основе JS-объектов
 var fragment = document.createDocumentFragment();
-for (i = 0; i < similarNotesNearby.length; i++) {
-  var newElement = document.createElement('div');
-  newElement.className = 'pin';
-  newElement.setAttribute('tabindex', '0');
-  newElement.style.left = similarNotesNearby[i].location.x + 'px';
-  newElement.style.top = similarNotesNearby[i].location.y + 'px';
-  newElement.innerHTML = '<img src="' + similarNotesNearby[i].author.avatar + '" class="rounded" width="40" height="40" >';
-  fragment.appendChild(newElement);
-}
-firstMark.appendChild(fragment);
-
-// Создаем элемент на основе шаблона #lodge-template
-var renderOfferInDialogPanel = function (offer) {
-  var offerElement = similarOfferTemplate.cloneNode(true);
-
-  offerElement.querySelector('.lodge__title').textContent = offer.title;
-  offerElement.querySelector('.lodge__address').textContent = offer.address;
-  // Знак рубля у меня не отображается
-  offerElement.querySelector('.lodge__price').innerHTML = offer.price + '&#x20bd;/ночь';
-  var offerType = offer.type;
-  // Заменяем flat на Квартира, bungalo на Бунгало, house на Дом
-  switch (offerType) {
-    case 'flat':
-      var newOfferType = offerType.replace('flat', 'Квартира');
-      break;
-    case 'bungalo':
-      newOfferType = offerType.replace('bungalo', 'Бунгало');
-      break;
-    case 'house':
-      newOfferType = offerType.replace('house', 'Дом');
-      break;
-  }
-  offerElement.querySelector('.lodge__type').textContent = newOfferType;
-  offerElement.querySelector('.lodge__rooms-and-guests').textContent = 'Для ' + offer.guests + ' гостей в ' + offer.rooms + ' комнатах';
-  offerElement.querySelector('.lodge__checkin-time').textContent = 'Заезд после ' + offer.checkin + ', выезд до ' + offer.checkout;
-
- // Выводим все доступные удобства из массива offer.features
-  for (i = 0; i < offer.features.length; i++) {
-    var features = document.createElement('span');
-    features.className = 'feature__image feature__image--' + offer.features[i];
-    offerElement.querySelector('.lodge__features').appendChild(features);
-  }
-  offerElement.querySelector('.lodge__description').textContent = offer.description;
-  return offerElement;
-};
 // Все pin заводим в массив, присваиваем им атрибут data-index и отключаем для всех класс pin-active
-
 var deactivateClassPinActive = function () {
-  for (i = 0; i < 9; i++) {
+  for (var i = 0; i < 9; i++) {
     pinsArray.push(pins[i]);
     pinsArray[i].setAttribute('data-index', i);
     pinsArray[i].classList.remove('pin--active');
   }
 };
-
 // Замена карточки элемента
 var replaceOfferCard = function () {
   var dialogPanel = offerDialog[0].querySelectorAll('.dialog__panel');
@@ -130,14 +25,12 @@ var deleteOfferCard = function () {
   dialogTitle[0].style.display = 'none';
   deactivateClassPinActive();
 };
-
-
 var openUserDialog = function (data) {
   dialogTitle[0].style.display = 'block';
 // Заменяем src у аватарки пользователя — изображения, которое записано в .dialog__title — на значения поля author.avatar отрисовываемого объекта
-  offerDialog[0].querySelector('.dialog__title img').src = similarNotesNearby[data].author.avatar;
+  offerDialog[0].querySelector('.dialog__title img').src = window.card.createCards[data].author.avatar;
 // Добавляем вновь созданный элемент dialog__panel
-  fragment.appendChild(renderOfferInDialogPanel(similarNotesNearby[data].offer));
+  fragment.appendChild(renderOfferInDialogPanel(window.card.createCards[data].offer));
   offerDialog[0].appendChild(fragment);
 // Удаляем для замены заполненный элемент dialog__panel
   replaceOfferCard();
@@ -162,7 +55,7 @@ var toolbarButtonHandler = function (e) {
   });
 };
 // При нажатии на аватарку срабатывает функция
-for (i = 0; i < pins.length; i++) {
+for (var i = 0; i < pins.length; i++) {
   pins[i].addEventListener('click', toolbarButtonHandler);
 }
 // Когда аватарка в фокусе при нажатии на enter открывается карточка объявления
@@ -181,66 +74,5 @@ dialogClose.addEventListener('click', function () {
 dialogClose.addEventListener('keydown', function (evt) {
   if (evt.keyCode === 13) {
     deleteOfferCard();
-  }
-});
-// Зависимость полей въезда и выезда гостей. Если меняем поле заезда, то автоматически меняется поле выезда
-time.addEventListener('change', function (e) {
-  time = e.currentTarget;
-  timeOut.selectedIndex = time.selectedIndex;
-});
-// Зависимость полей въезда и выезда гостей. Если меняем поле выезда, то автоматически меняется поле заезда
-timeOut.addEventListener('change', function (e) {
-  timeOut = e.currentTarget;
-  time.selectedIndex = timeOut.selectedIndex;
-});
-// Синхронизируем значение поля "Тип жилья" с минимальной ценой
-type.addEventListener('change', function (e) {
-  type = e.currentTarget;
-  var selectedType = type.selectedIndex;
-  switch (selectedType) {
-    case 0:
-      price.setAttribute('min', '1000');
-      price.setAttribute('placeholder', '1000');
-      break;
-    case 1:
-      price.setAttribute('min', '0');
-      price.setAttribute('placeholder', '0');
-      break;
-    case 2:
-      price.setAttribute('min', '10000');
-      price.setAttribute('placeholder', '10000');
-      break;
-  }
-});
-// Связь между количеством комнат и количеством гостей. Если меняем поле с количеством комнат, то автоматически меняется поле количества гостей
-roomNumber.addEventListener('change', function (e) {
-  roomNumber = e.currentTarget;
-  var selectedIndexRoomNumber = roomNumber.selectedIndex;
-  switch (selectedIndexRoomNumber) {
-    case 0:
-      capacity.selectedIndex = 1;
-      break;
-    case 1:
-      capacity.selectedIndex = 0;
-      break;
-    case 2:
-      capacity.selectedIndex = 0;
-      break;
-  }
-});
-// Проверяем, правильно ли заполнены поля при отправке формы и сбрасываем значения на исходные после отправки формы
-formSubmit.addEventListener('click', function () {
-  price.setAttribute('placeholder', '');
-  if (title.value.length < 30 || title.value.length > 100) {
-    title.style.border = '3px solid red';
-    title.style.name = 'Заголовок должен быть длиной от 30 до 100 символов';
-  }
-  if (typeof (price) !== 'number' || price > 1000000 || price < 1000) {
-    price.style.border = '3px solid red';
-  } else {
-    price.setAttribute('placeholder', '1000');
-    type.selectedIndex = 0;
-    roomNumber.selectedIndex = 0;
-    time.selectedIndex = 0;
   }
 });
