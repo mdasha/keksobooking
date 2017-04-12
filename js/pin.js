@@ -49,17 +49,12 @@ window.pin = (function () {
     offerElement.querySelector('.lodge__description').textContent = offer.description;
     return offerElement;
   };
-  function createOffers() {
-    // Создаем пустой массив предложений
-    var offerElements = [];
-    // Заполняем массив данными 8 сгенерированных JS-объектов
-    for (i = 0; i < 8; i++) {
-      offerElements[i] = renderOfferInDialogPanel(0);
-    }
-    return offerElements;
+  var offerElements = [];
+  for (var j = 0; j < 8; j++) {
+    offerElements[j] = renderOfferInDialogPanel(window.card.createCards[j].offer);
   }
   return {
-    'createOffers': createOffers()
+    'createOffers': offerElements
   };
 })();
 
