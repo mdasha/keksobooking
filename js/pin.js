@@ -2,6 +2,8 @@
 window.pin = (function () {
   var firstMark = document.querySelector('.tokyo__pin-map');
   var similarOfferTemplate = document.querySelector('#lodge-template').content;
+  var offerDialog = document.querySelector('#offer-dialog');
+  var dialogPanel = offerDialog.querySelectorAll('.dialog__panel');
   // Заполнение блока DOM-элементами на основе JS-объектов
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < window.card.createCards.length; i++) {
@@ -51,8 +53,9 @@ window.pin = (function () {
   };
   var offerElements = [];
   for (var j = 0; j < 8; j++) {
-    offerElements[j] = renderOfferInDialogPanel(window.card.createCards[j].offer);
+    offerElements[j + 1] = renderOfferInDialogPanel(window.card.createCards[j].offer).childNodes[1].innerHTML;
   }
+  offerElements[0] = dialogPanel[0].innerHTML;
   return {
     'createOffers': offerElements
   };
