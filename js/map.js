@@ -21,10 +21,15 @@ var deleteOfferCard = function () {
 var openUserDialog = function (data) {
 // Заменяем текст в карточке на нужный
   dialogPanel[0].style.display = 'block';
-  dialogPanel[0].innerHTML = window.pin.createOffers[data].childNodes[1].innerHTML;
+  dialogPanel[0].innerHTML = window.pin.createOffers[data];
   dialogTitle[0].style.display = 'block';
 // Заменяем src у аватарки пользователя — изображения, которое записано в .dialog__title — на значения поля author.avatar отрисовываемого объекта
-  offerDialog.querySelector('.dialog__title img').src = window.card.createCards[data].author.avatar;
+  var dataIndexPin = document.querySelector('.pin--active').getAttribute('data-index');
+  if (dataIndexPin === '0') {
+    offerDialog.querySelector('.dialog__title img').src = 'img/main-pin-image.png';
+  } else {
+    offerDialog.querySelector('.dialog__title img').src = window.card.createCards[(data - 1)].author.avatar;
+  }
 };
 var pins = document.querySelectorAll('.pin');
 var pinsArray = [];
@@ -36,7 +41,7 @@ var toolbarButtonHandler = function (e) {
   pins = e.currentTarget;
   pins.classList.add('pin--active');
  // Получаем значение атрибута data-index текущего элемента и вызываем функцию, которая меняет данные об объекте и его фотку
-  var dataIndexPin = pins.getAttribute('data-index') - 1;
+  var dataIndexPin = pins.getAttribute('data-index');
   openUserDialog(dataIndexPin);
  // При открытом диалоге клавиша esc закрывает его и деактивирует элемент с классом .pin
   document.addEventListener('keydown', function (evt) {
