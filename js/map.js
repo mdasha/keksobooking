@@ -1,8 +1,8 @@
 ﻿'use strict';
-var offerDialog = document.querySelectorAll('#offer-dialog');
-var dialogClose = offerDialog[0].querySelector('.dialog__close');
-var dialogTitle = offerDialog[0].querySelectorAll('.dialog__title');
-var dialogPanel = offerDialog[0].querySelectorAll('.dialog__panel');
+var offerDialog = document.querySelector('#offer-dialog');
+var dialogClose = offerDialog.querySelector('.dialog__close');
+var dialogTitle = offerDialog.querySelectorAll('.dialog__title');
+var dialogPanel = offerDialog.querySelectorAll('.dialog__panel');
 // Все pin заводим в массив, присваиваем им атрибут data-index и отключаем для всех класс pin-active
 var deactivateClassPinActive = function () {
   for (var k = 0; k < 9; k++) {
@@ -11,32 +11,21 @@ var deactivateClassPinActive = function () {
     pinsArray[k].classList.remove('pin--active');
   }
 };
-// Замена карточки элемента
-var replaceOfferCard = function () {
-  dialogPanel = offerDialog[0].querySelectorAll('.dialog__panel');
-  if (dialogPanel[1]) {
-    offerDialog[0].removeChild(dialogPanel[0]);
-  }
-};
+
 // Удаление карточки элемента
 var deleteOfferCard = function () {
-  dialogPanel = offerDialog[0].querySelectorAll('.dialog__panel');
-  offerDialog[0].removeChild(dialogPanel[0]);
+  dialogPanel = offerDialog.querySelectorAll('.dialog__panel');
+  dialogPanel[0].style.display = 'none';
   dialogTitle[0].style.display = 'none';
   deactivateClassPinActive();
 };
-var newElement = {};
 var openUserDialog = function (data) {
-  var fragment = document.createDocumentFragment();
+// Заменяем текст в карточке на нужный
+  dialogPanel[0].style.display = 'block';
+  dialogPanel[0].innerHTML = window.pin.createOffers[data].childNodes[1].innerHTML;
   dialogTitle[0].style.display = 'block';
 // Заменяем src у аватарки пользователя — изображения, которое записано в .dialog__title — на значения поля author.avatar отрисовываемого объекта
-  offerDialog[0].querySelector('.dialog__title img').src = window.card.createCards[data].author.avatar;
-// Добавляем вновь созданный элемент dialog__panel
-  newElement = window.pin.createOffers[data];
-  fragment.appendChild(newElement);
-  offerDialog[0].appendChild(fragment);
-    // Удаляем для замены заполненный элемент dialog__panel
-  replaceOfferCard();
+  offerDialog.querySelector('.dialog__title img').src = window.card.createCards[data].author.avatar;
 };
 var pins = document.querySelectorAll('.pin');
 var pinsArray = [];
