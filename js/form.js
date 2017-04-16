@@ -1,7 +1,7 @@
 ﻿'use strict';
 (function () {
-  var time = document.querySelector('#time');
-  var timeOut = document.querySelector('#timeout');
+  var checkInTime = document.querySelector('#time');
+  var checkOutTime = document.querySelector('#timeout');
   var type = document.querySelector('#type');
   var price = document.querySelector('#price');
   var roomNumber = document.querySelector('#room_number');
@@ -9,14 +9,14 @@
   var formSubmit = document.querySelector('.form__submit');
   var title = document.querySelector('#title');
   // Зависимость полей въезда и выезда гостей. Если меняем поле заезда, то автоматически меняется поле выезда
-  time.addEventListener('change', function (e) {
-    time = e.currentTarget;
-    timeOut.selectedIndex = time.selectedIndex;
+  checkInTime.addEventListener('change', function (e) {
+    checkInTime = e.currentTarget;
+    checkOutTime.selectedIndex = checkInTime.selectedIndex;
   });
   // Зависимость полей въезда и выезда гостей. Если меняем поле выезда, то автоматически меняется поле заезда
-  timeOut.addEventListener('change', function (e) {
-    timeOut = e.currentTarget;
-    time.selectedIndex = timeOut.selectedIndex;
+  checkOutTime.addEventListener('change', function (e) {
+    checkOutTime = e.currentTarget;
+    checkInTime.selectedIndex = checkOutTime.selectedIndex;
   });
   // Синхронизируем значение поля "Тип жилья" с минимальной ценой
   type.addEventListener('change', function (e) {
@@ -66,7 +66,7 @@
       price.setAttribute('placeholder', '1000');
       type.selectedIndex = 0;
       roomNumber.selectedIndex = 0;
-      time.selectedIndex = 0;
+      checkInTime.selectedIndex = 0;
     }
   });
 
