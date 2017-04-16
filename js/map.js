@@ -11,7 +11,6 @@ var deactivateClassPinActive = function () {
     pinsArray[k].classList.remove('pin--active');
   }
 };
-
 // Удаление карточки элемента
 var deleteOfferCard = function () {
   dialogPanel = offerDialog.querySelectorAll('.dialog__panel');
@@ -22,10 +21,15 @@ var deleteOfferCard = function () {
 var openUserDialog = function (data) {
 // Заменяем текст в карточке на нужный
   dialogPanel[0].style.display = 'block';
-  dialogPanel[0].innerHTML = window.pin.createOffers[data].childNodes[1].innerHTML;
+  dialogPanel[0].innerHTML = window.pin.createOffers[data];
   dialogTitle[0].style.display = 'block';
 // Заменяем src у аватарки пользователя — изображения, которое записано в .dialog__title — на значения поля author.avatar отрисовываемого объекта
-  offerDialog.querySelector('.dialog__title img').src = window.card.createCards[data].author.avatar;
+  var dataIndexPin = document.querySelector('.pin--active').getAttribute('data-index');
+  if (dataIndexPin === '0') {
+    offerDialog.querySelector('.dialog__title img').src = 'img/main-pin-image.png';
+  } else {
+    offerDialog.querySelector('.dialog__title img').src = window.card.createCards[(data - 1)].author.avatar;
+  }
 };
 var pins = document.querySelectorAll('.pin');
 var pinsArray = [];
@@ -37,7 +41,7 @@ var toolbarButtonHandler = function (e) {
   pins = e.currentTarget;
   pins.classList.add('pin--active');
  // Получаем значение атрибута data-index текущего элемента и вызываем функцию, которая меняет данные об объекте и его фотку
-  var dataIndexPin = pins.getAttribute('data-index') - 1;
+  var dataIndexPin = pins.getAttribute('data-index');
   openUserDialog(dataIndexPin);
  // При открытом диалоге клавиша esc закрывает его и деактивирует элемент с классом .pin
   document.addEventListener('keydown', function (evt) {
@@ -69,3 +73,49 @@ dialogClose.addEventListener('keydown', function (evt) {
     deleteOfferCard();
   }
 });
+// Перетаскиваем элемент .main-pin
+var pinContainer = document.querySelector('.tokyo__pin-map');
+var draggedElement = pinContainer.querySelector('.pin__main');
+draggedElement.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+// Запомним координаты точки, с которой начали движение
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+// При каждом движении мыши нам нужно обновлять смещение относительно первоначальной точки, чтобы диалог смещался на необходимую величину
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    draggedElement.style.top = (draggedElement.offsetTop - shift.y) + 'px';
+    draggedElement.style.left = (draggedElement.offsetLeft - shift.x) + 'px';
+  // Заполняем поле адреса координатами в зависимости от перемещения .main_pin
+    var pinLengthHalf = 37.5;
+    var pinHeight = 94;
+    var NewPinX = parseInt(draggedElement.style.left, 10) + pinLengthHalf;
+    var NewPinY = parseInt(draggedElement.style.top, 10) + pinHeight;
+    var address = document.querySelector('#address');
+    address.value = 'x: ' + NewPinX + 'px, y: ' + NewPinY + 'рх';
+  };
+// При отпускании кнопки мыши нужно переставать слушать события движения мыши
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+// Добавляем обработчики события передвижения мыши и отпускания кнопки мыши
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
+

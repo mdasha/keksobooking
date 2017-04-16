@@ -8,7 +8,6 @@
   var capacity = document.querySelector('#capacity');
   var formSubmit = document.querySelector('.form__submit');
   var title = document.querySelector('#title');
-
   // Зависимость полей въезда и выезда гостей. Если меняем поле заезда, то автоматически меняется поле выезда
   time.addEventListener('change', function (e) {
     time = e.currentTarget;
@@ -70,4 +69,5 @@
       time.selectedIndex = 0;
     }
   });
+
 })();
