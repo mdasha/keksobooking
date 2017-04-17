@@ -1,10 +1,8 @@
 'use strict';
 window.synchronizeFields = function (field1, field2, array1, array2, callback) {
-  field1.addEventListener('change', function (evt) {
-    field1 = evt.currentTarget;
-    var syncValues = function (field2, value) {
-      field2.value = value;
-    };
-    callback(syncValues);
-  });
+  for (var i = 0; i < array1.length; i++) {
+    if (field1.value === array1[i]) {
+      callback(field2, array2[i]);
+    }
+  }
 };
