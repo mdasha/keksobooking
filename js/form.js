@@ -11,47 +11,35 @@
   // Зависимость полей въезда и выезда гостей. Если меняем поле заезда, то автоматически меняется поле выезда
   checkInTime.addEventListener('change', function (e) {
     checkInTime = e.currentTarget;
-    checkOutTime.selectedIndex = checkInTime.selectedIndex;
+    var syncValues = function (element, value) {
+      element.value = value;
+    };
+    window.synchronizeFields(checkInTime, checkOutTime, ['12', '13', '14'], ['12', '13', '14'], syncValues);
   });
   // Зависимость полей въезда и выезда гостей. Если меняем поле выезда, то автоматически меняется поле заезда
   checkOutTime.addEventListener('change', function (e) {
     checkOutTime = e.currentTarget;
-    checkInTime.selectedIndex = checkOutTime.selectedIndex;
+    var syncValues = function (element, value) {
+      element.value = value;
+    };
+    window.synchronizeFields(checkOutTime, checkInTime, ['12', '13', '14'], ['12', '13', '14'], syncValues);
   });
   // Синхронизируем значение поля "Тип жилья" с минимальной ценой
   type.addEventListener('change', function (e) {
     type = e.currentTarget;
-    var selectedType = type.selectedIndex;
-    switch (selectedType) {
-      case 0:
-        price.setAttribute('min', '1000');
-        price.setAttribute('placeholder', '1000');
-        break;
-      case 1:
-        price.setAttribute('min', '0');
-        price.setAttribute('placeholder', '0');
-        break;
-      case 2:
-        price.setAttribute('min', '10000');
-        price.setAttribute('placeholder', '10000');
-        break;
-    }
+    var syncValues = function (element, value) {
+      element.min = value;
+      element.placeholder = value;
+    };
+    window.synchronizeFields(type, price, ['flat', 'shack', 'palace'], ['1000', '0', '10000'], syncValues);
   });
   // Связь между количеством комнат и количеством гостей. Если меняем поле с количеством комнат, то автоматически меняется поле количества гостей
   roomNumber.addEventListener('change', function (e) {
     roomNumber = e.currentTarget;
-    var selectedIndexRoomNumber = roomNumber.selectedIndex;
-    switch (selectedIndexRoomNumber) {
-      case 0:
-        capacity.selectedIndex = 1;
-        break;
-      case 1:
-        capacity.selectedIndex = 0;
-        break;
-      case 2:
-        capacity.selectedIndex = 0;
-        break;
-    }
+    var syncValues = function (element, value) {
+      element.value = value;
+    };
+    window.synchronizeFields(roomNumber, capacity, ['oneRoom', 'twoRooms', 'manyRooms'], ['noGuests', 'threeGuests', 'threeGuests'], syncValues);
   });
   // Проверяем, правильно ли заполнены поля при отправке формы и сбрасываем значения на исходные после отправки формы
   formSubmit.addEventListener('click', function () {
