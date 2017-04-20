@@ -6,16 +6,18 @@ window.pin = (function () {
   var dialogPanel = offerDialog.querySelectorAll('.dialog__panel');
   // Заполнение блока DOM-элементами на основе JS-объектов
   var fragment = document.createDocumentFragment();
-  for (var j = 0; j < window.card.createCards.length; j++) {
-    var newElement = document.createElement('div');
-    newElement.className = 'pin';
-    newElement.setAttribute('tabindex', '0');
-    newElement.style.left = window.card.createCards[j].location.x + 'px';
-    newElement.style.top = window.card.createCards[j].location.y + 'px';
-    newElement.innerHTML = '<img src="' + window.card.createCards[j].author.avatar + '" class="rounded" width="40" height="40" >';
-    fragment.appendChild(newElement);
-  }
-  firstMark.appendChild(fragment);
+  window.load(function (j) {
+    for (j = 0; j < window.card.createCards.length; j++) {
+      var newElement = document.createElement('div');
+      newElement.className = 'pin';
+      newElement.setAttribute('tabindex', '0');
+      newElement.style.left = window.card.createCards[j].location.x + 'px';
+      newElement.style.top = window.card.createCards[j].location.y + 'px';
+      newElement.innerHTML = '<img src="' + window.card.createCards[j].author.avatar + '" class="rounded" width="40" height="40" >';
+      fragment.appendChild(newElement);
+      firstMark.appendChild(fragment);
+    }
+  });
   // Создаем элемент на основе шаблона #lodge-template
   var renderOfferInDialogPanel = function (offer) {
     var offerElement = similarOfferTemplate.cloneNode(true);
@@ -46,11 +48,22 @@ window.pin = (function () {
       offerElement.querySelector('.lodge__features').appendChild(features);
     }
     offerElement.querySelector('.lodge__description').textContent = offer.description;
+    // Добавляем изображения объектов
+    var photos = document.createElement('div');
+    photos.className = 'lodge__photos';
+    for (i = 0; i < offer.photos.length; i++) {
+      var photosImg = document.createElement('img');
+      photosImg.src = offer.photos[i];
+      photosImg.alt = 'Lodge photo';
+      photosImg.height = '42';
+      photosImg.width = '52';
+      offerElement.querySelector('.lodge__photos').appendChild(photosImg);
+    }
     return offerElement;
   };
   function offerElementee() {
     var offerElements = [];
-    window.load(function (cardItems, onError) {
+    window.load(function () {
       for (var k = 0; k < window.card.createCards.length; k++) {
         offerElements[k + 1] = renderOfferInDialogPanel(window.card.createCards[k].offer).childNodes[1].innerHTML;
       }
