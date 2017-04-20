@@ -6,7 +6,7 @@
   var dialogPanel = offerDialog.querySelectorAll('.dialog__panel');
 // Все pin заводим в массив, присваиваем им атрибут data-index и отключаем для всех класс pin-active
   var deactivateClassPinActive = function () {
-    for (var k = 0; k < 9; k++) {
+    for (var k = 0; k < 11; k++) {
       pinsArray.push(pins[k]);
       pinsArray[k].setAttribute('data-index', k);
       pinsArray[k].classList.remove('pin--active');
@@ -40,11 +40,11 @@
   };
   var i = 0;
 // При нажатии на аватарку срабатывает функция
-  for (var l = 0; l < 9; l++) {
+  for (var l = 0; l < 11; l++) {
     pins[l].addEventListener('click', toolbarButtonHandler);
   }
 // Когда аватарка в фокусе при нажатии на enter открывается карточка объявления
-  for (i = 0; i < 9; i++) {
+  for (i = 0; i < 11; i++) {
     pins[i].addEventListener('keydown', function (evt) {
       if (evt.keyCode === 13) {
         toolbarButtonHandler(evt);
