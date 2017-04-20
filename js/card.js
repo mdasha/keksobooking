@@ -1,50 +1,42 @@
 ﻿'use strict';
 window.card = (function () {
-  // Функция генерации случайных данных - целых чисел в заданном диапазоне от min до max
-  function rand(min, max) {
-    min = parseInt(min, 10);
-    max = parseInt(max, 10);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
 // Создаем одно предложение
-  function createSimilarNotesNearby(i) {
+  var renderCard = function (cardItem) {
     var similarNoteNearby =
       {
         author: {
-          avatar: 'img/avatars/user0' + (i + 1) + '.png'
+          avatar: cardItem.author.avatar
         },
         location: {
-          x: rand(300, 900),
-          y: rand(100, 500)
+          x: cardItem.location.x,
+          y: cardItem.location.y
         },
         offer: {
-          title: window.appData.offerTitles[i],
-          address: window.appData.offerAddressess[i],
-          price: rand(1000, 1000000),
-          type: window.appData.offerTypes[rand(0, 2)],
-          rooms: rand(1, 5),
-          guests: rand(1, 10),
-          checkin: window.appData.offerChecks[rand(0, 2)],
-          checkout: window.appData.offerChecks[rand(0, 2)],
-          features: window.appData.offerFeatures.split(', ', rand(1, 6)),
-          description: '',
-          photos: ''
+          title: cardItem.offer.title,
+          address: cardItem.offer.address,
+          price: cardItem.offer.price,
+          type: cardItem.offer.type,
+          rooms: cardItem.offer.rooms,
+          guests: cardItem.offer.guests,
+          checkin: cardItem.offer.checkin,
+          checkout: cardItem.offer.checkout,
+          features: cardItem.offer.features,
+          description: cardItem.offer.description,
+          photos: cardItem.offer.photos
         }
       };
     return similarNoteNearby;
-  }
+  };
   function createCards() {
-    // Создаем пустой массив предложений
-    var similarNotesNearby = [];
-    // Заполняем массив данными 8 сгенерированных JS-объектов
-    for (var i = 0; i < 8; i++) {
-      similarNotesNearby.splice(i, 1, createSimilarNotesNearby(i));
-    }
-    return similarNotesNearby;
+    var cards = [];
+    window.load(function (cardItems, onError) {
+      for (var i = 0; i < cardItems.length; i++) {
+        cards[i] = renderCard(cardItems[i]);
+      }
+    });
+    return cards;
   }
-
   return {
     'createCards': createCards()
   };
 })();
-

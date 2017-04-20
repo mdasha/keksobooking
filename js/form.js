@@ -57,5 +57,4 @@
       checkInTime.selectedIndex = 0;
     }
   });
-
 })();
