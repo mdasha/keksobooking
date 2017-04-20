@@ -29,7 +29,7 @@ window.card = (function () {
   };
   function createCards() {
     var cards = [];
-    window.load(function (cardItems, onError) {
+    window.load(function (cardItems) {
       for (var i = 0; i < cardItems.length; i++) {
         cards[i] = renderCard(cardItems[i]);
       }
