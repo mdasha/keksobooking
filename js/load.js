@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 (function () {
   var URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
 
