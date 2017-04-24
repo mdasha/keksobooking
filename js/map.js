@@ -4,7 +4,25 @@
   var dialogClose = offerDialog.querySelector('.dialog__close');
   var dialogTitle = offerDialog.querySelectorAll('.dialog__title');
   var dialogPanel = offerDialog.querySelectorAll('.dialog__panel');
-  window.load(function (onSuccess) {
+  window.cards = [];
+  var fragment = document.createDocumentFragment();
+  var firstMark = document.querySelector('.tokyo__pin-map');
+  window.offerElements = [];
+  window.offerElements[0] = dialogPanel[0].innerHTML;
+  window.load(function (data) {
+    window.cards = data;
+    for (var i = 0; i < data.length; i++) {
+      window.cards[i] = window.renderCard(window.cards[i]);
+      var newElement = document.createElement('div');
+      newElement.className = 'pin';
+      newElement.setAttribute('tabindex', '0');
+      newElement.style.left = window.cards[i].location.x + 'px';
+      newElement.style.top = window.cards[i].location.y + 'px';
+      newElement.innerHTML = '<img src="' + window.cards[i].author.avatar + '" class="rounded" width="40" height="40" >';
+      fragment.appendChild(newElement);
+      firstMark.appendChild(fragment);
+      window.offerElements[i + 1] = window.pin.createOffers(window.cards[i].offer).childNodes[1].innerHTML;
+    }
     var pins = document.querySelectorAll('.pin');
     var pinsArray = [];
 // Все pin заводим в массив, присваиваем им атрибут data-index и отключаем для всех класс pin-active
@@ -39,7 +57,7 @@
         }
       });
     };
-    var i = 0;
+    i = 0;
 // При нажатии на аватарку срабатывает функция
     for (var l = 0; l < 11; l++) {
       pins[l].addEventListener('click', toolbarButtonHandler);
@@ -63,6 +81,11 @@
       }
     });
   });
+
+
+
+
+  
 // Перетаскиваем элемент .main-pin
   var pinContainer = document.querySelector('.tokyo__pin-map');
   var draggedElement = pinContainer.querySelector('.pin__main');
