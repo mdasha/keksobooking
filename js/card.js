@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 (function () {
 // Создаем одно предложение
   window.renderCard = function (cardItem) {
