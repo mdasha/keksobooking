@@ -81,11 +81,6 @@
       }
     });
   });
-
-
-
-
-  
 // Перетаскиваем элемент .main-pin
   var pinContainer = document.querySelector('.tokyo__pin-map');
   var draggedElement = pinContainer.querySelector('.pin__main');
