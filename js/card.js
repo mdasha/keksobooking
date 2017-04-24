@@ -1,7 +1,7 @@
 ﻿'use strict';
-window.card = (function () {
+(function () {
 // Создаем одно предложение
-  var renderCard = function (cardItem) {
+  window.renderCard = function (cardItem) {
     var similarNoteNearby =
       {
         author: {
@@ -27,16 +27,5 @@ window.card = (function () {
       };
     return similarNoteNearby;
   };
-  function createCards() {
-    var cards = [];
-    window.load(function (cardItems) {
-      for (var i = 0; i < cardItems.length; i++) {
-        cards[i] = renderCard(cardItems[i]);
-      }
-    });
-    return cards;
-  }
-  return {
-    'createCards': createCards()
-  };
 })();
+
