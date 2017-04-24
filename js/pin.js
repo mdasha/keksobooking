@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 window.pin = (function () {
   var similarOfferTemplate = document.querySelector('#lodge-template').content;
   // Заполнение блока DOM-элементами на основе JS-объектов
