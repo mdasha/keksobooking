@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 (function () {
   var offerDialog = document.querySelector('#offer-dialog');
   var dialogClose = offerDialog.querySelector('.dialog__close');
