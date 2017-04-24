@@ -1,23 +1,7 @@
 ﻿'use strict';
 window.pin = (function () {
-  var firstMark = document.querySelector('.tokyo__pin-map');
   var similarOfferTemplate = document.querySelector('#lodge-template').content;
-  var offerDialog = document.querySelector('#offer-dialog');
-  var dialogPanel = offerDialog.querySelectorAll('.dialog__panel');
   // Заполнение блока DOM-элементами на основе JS-объектов
-  var fragment = document.createDocumentFragment();
-  window.load(function (j) {
-    for (j = 0; j < window.card.createCards.length; j++) {
-      var newElement = document.createElement('div');
-      newElement.className = 'pin';
-      newElement.setAttribute('tabindex', '0');
-      newElement.style.left = window.card.createCards[j].location.x + 'px';
-      newElement.style.top = window.card.createCards[j].location.y + 'px';
-      newElement.innerHTML = '<img src="' + window.card.createCards[j].author.avatar + '" class="rounded" width="40" height="40" >';
-      fragment.appendChild(newElement);
-      firstMark.appendChild(fragment);
-    }
-  });
   // Создаем элемент на основе шаблона #lodge-template
   var renderOfferInDialogPanel = function (offer) {
     var offerElement = similarOfferTemplate.cloneNode(true);
@@ -61,18 +45,8 @@ window.pin = (function () {
     }
     return offerElement;
   };
-  function offerElementee() {
-    var offerElements = [];
-    window.load(function () {
-      for (var k = 0; k < window.card.createCards.length; k++) {
-        offerElements[k + 1] = renderOfferInDialogPanel(window.card.createCards[k].offer).childNodes[1].innerHTML;
-      }
-    });
-    offerElements[0] = dialogPanel[0].innerHTML;
-    return offerElements;
-  }
   return {
-    'createOffers': offerElementee()
+    'createOffers': renderOfferInDialogPanel
   };
 })();
 
