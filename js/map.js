@@ -1,65 +1,85 @@
-﻿'use strict';
+'use strict';
 (function () {
   var offerDialog = document.querySelector('#offer-dialog');
   var dialogClose = offerDialog.querySelector('.dialog__close');
   var dialogTitle = offerDialog.querySelectorAll('.dialog__title');
   var dialogPanel = offerDialog.querySelectorAll('.dialog__panel');
-// Все pin заводим в массив, присваиваем им атрибут data-index и отключаем для всех класс pin-active
-  var deactivateClassPinActive = function () {
-    for (var k = 0; k < 9; k++) {
-      pinsArray.push(pins[k]);
-      pinsArray[k].setAttribute('data-index', k);
-      pinsArray[k].classList.remove('pin--active');
+  window.cards = [];
+  var fragment = document.createDocumentFragment();
+  var firstMark = document.querySelector('.tokyo__pin-map');
+  window.offerElements = [];
+  window.offerElements[0] = dialogPanel[0].innerHTML;
+  window.load(function (data) {
+    window.cards = data;
+    for (var i = 0; i < data.length; i++) {
+      window.cards[i] = window.renderCard(window.cards[i]);
+      var newElement = document.createElement('div');
+      newElement.className = 'pin';
+      newElement.setAttribute('tabindex', '0');
+      newElement.style.left = window.cards[i].location.x + 'px';
+      newElement.style.top = window.cards[i].location.y + 'px';
+      newElement.innerHTML = '<img src="' + window.cards[i].author.avatar + '" class="rounded" width="40" height="40" >';
+      fragment.appendChild(newElement);
+      firstMark.appendChild(fragment);
+      window.offerElements[i + 1] = window.pin.createOffers(window.cards[i].offer).childNodes[1].innerHTML;
     }
-  };
+    var pins = document.querySelectorAll('.pin');
+    var pinsArray = [];
+// Все pin заводим в массив, присваиваем им атрибут data-index и отключаем для всех класс pin-active
+    var deactivateClassPinActive = function () {
+      for (var k = 0; k < 11; k++) {
+        pinsArray.push(pins[k]);
+        pinsArray[k].setAttribute('data-index', k);
+        pinsArray[k].classList.remove('pin--active');
+      }
+    };
 // Удаление карточки элемента
-  var deleteOfferCard = function () {
-    dialogPanel = offerDialog.querySelectorAll('.dialog__panel');
-    dialogPanel[0].style.display = 'none';
-    dialogTitle[0].style.display = 'none';
-    deactivateClassPinActive();
-  };
-  var pins = document.querySelectorAll('.pin');
-  var pinsArray = [];
-  var toolbarButtonHandler = function (e) {
+    var deleteOfferCard = function () {
+      dialogPanel = offerDialog.querySelectorAll('.dialog__panel');
+      dialogPanel[0].style.display = 'none';
+      dialogTitle[0].style.display = 'none';
+      deactivateClassPinActive();
+    };
+    var toolbarButtonHandler = function (e) {
 // Создаем массив элементов с классом pin и убираем со всех элементов класс .pin-active. При создании массива создаем специальный атрибут data-index
-    deactivateClassPinActive();
+      deactivateClassPinActive();
 // Добавляем класс .pin-active выделенному элементу
-    pins = e.currentTarget;
-    pins.classList.add('pin--active');
+      pins = e.currentTarget;
+      pins.classList.add('pin--active');
  // Получаем значение атрибута data-index текущего элемента и вызываем функцию, которая меняет данные об объекте и его фотку
-    var dataIndexPin = pins.getAttribute('data-index');
+      var dataIndexPin = pins.getAttribute('data-index');
 // Подключаем отдельным модулем (show-card.js) вызов функции, которая показывает карточку выбранного жилья по нажатию на метку на карте
-    window.showCard.openUserDialog(dataIndexPin);
+      window.showCard.openUserDialog(dataIndexPin);
  // При открытом диалоге клавиша esc закрывает его и деактивирует элемент с классом .pin
-    document.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === 27) {
+      document.addEventListener('keydown', function (evt) {
+        if (evt.keyCode === 27) {
+          deleteOfferCard();
+        }
+      });
+    };
+    i = 0;
+// При нажатии на аватарку срабатывает функция
+    for (var l = 0; l < 11; l++) {
+      pins[l].addEventListener('click', toolbarButtonHandler);
+    }
+// Когда аватарка в фокусе при нажатии на enter открывается карточка объявления
+    for (i = 0; i < 11; i++) {
+      pins[i].addEventListener('keydown', function (evt) {
+        if (evt.keyCode === 13) {
+          toolbarButtonHandler(evt);
+        }
+      });
+    }
+// При нажатии на элемент .dialog-close скрываем карточку объявления
+    dialogClose.addEventListener('click', function () {
+      deleteOfferCard();
+    });
+// При открытом диалоге и фокусе на крестике нажатие клавиши ENTER приводит к закрытию диалога и деактивации активного элемента .pin
+    dialogClose.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === 13) {
         deleteOfferCard();
       }
     });
-  };
-  var i = 0;
-// При нажатии на аватарку срабатывает функция
-  for (var l = 0; l < 9; l++) {
-    pins[l].addEventListener('click', toolbarButtonHandler);
-  }
-// Когда аватарка в фокусе при нажатии на enter открывается карточка объявления
-  for (i = 0; i < 9; i++) {
-    pins[i].addEventListener('keydown', function (evt) {
-      if (evt.keyCode === 13) {
-        toolbarButtonHandler(evt);
-      }
-    });
-  }
-// При нажатии на элемент .dialog-close скрываем карточку объявления
-  dialogClose.addEventListener('click', function () {
-    deleteOfferCard();
-  });
-// При открытом диалоге и фокусе на крестике нажатие клавиши ENTER приводит к закрытию диалога и деактивации активного элемента .pin
-  dialogClose.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === 13) {
-      deleteOfferCard();
-    }
   });
 // Перетаскиваем элемент .main-pin
   var pinContainer = document.querySelector('.tokyo__pin-map');

@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 (function () {
   var checkInTime = document.querySelector('#time');
   var checkOutTime = document.querySelector('#timeout');
@@ -57,5 +57,4 @@
       checkInTime.selectedIndex = 0;
     }
   });
-
 })();
