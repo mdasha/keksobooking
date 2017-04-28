@@ -29,7 +29,6 @@
       window.offerElements[i + 1] = window.pin.createOffers(data[i].offer).childNodes[1].innerHTML;
     }
     var pins = document.querySelectorAll('.pin');
-    console.log(pins);
     // Подключаем модуль отрисковки pin-ов на карте
     var pinsArray = [];
 // Считаем количество отрисовываемых pin-ов с учетом главного pin-main
