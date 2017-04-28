@@ -9,10 +9,13 @@
   window.render = [];
   window.offerElements = [];
   window.offerElements[0] = dialogPanel[0].innerHTML;
+  var newElement = [];
   window.renderOffers = function (data) {
-    var newElement = [];
+    newElement.map(function (pinEl) {
+      pinEl.remove();
+    });
+    newElement = [];
     for (var i = 0; i < data.length; i++) {
-
       window.render[i] = document.createDocumentFragment();
       data[i] = window.renderCard(data[i]);
       newElement[i] = document.createElement('div');

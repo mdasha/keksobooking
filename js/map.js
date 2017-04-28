@@ -7,8 +7,6 @@
     window.sameHousingTypes = window.cards.filter(function (it) {
       return it.offer.type === offerType;
     });
-    console.log('По типу жилья ' + window.sameHousingTypes);
-    console.log(window.sameHousingTypes);
     window.renderOffers(window.sameHousingTypes);
   };
 // Загружаем исходные данные с сервера
@@ -18,17 +16,89 @@
   });
   // Фильтруем элементы сначала по типу жилья
   var offerType;
-  var housingType = document.querySelector('#housing_type');
-// Фильтруем по типу жилья
-  housingType.addEventListener('change', function (e) {
-    housingType = e.currentTarget;
-    if (housingType.value !== 'any') {
-      offerType = housingType.value;
-      updateOffers();
-    } else {
-      window.renderOffers(window.cards);
+  var timeout;
+  function debounce(func) {
+    if (timeout) {
+      window.clearTimeout(timeout);
     }
+    timeout = window.setTimeout(func, 500);
+  }
+  var formFilters = document.querySelector('.tokyo__filters');
+  formFilters.addEventListener('change', function () {
+    debounce(function () {
+    var formData = new FormData(formFilters);
+    var housingType = formData.get('housing_type');
+    var housingPrice = formData.get('housing_price');
+    var housingRoomNumber = formData.get('housing_room-number');
+    var housingGuestsNumber = formData.get('housing_guests-number');
+    var housingFeatures = formData.getAll('feature');
+    var filterCards = [];
+    filterCards = propertyFilter(window.cards, 'type', housingType);
+    filterCards = priceFilter(filterCards, 'price', housingPrice);
+    filterCards = propertyFilter(filterCards, 'rooms', housingRoomNumber);
+    filterCards = propertyFilter(filterCards, 'guests', housingGuestsNumber);
+    filterCards = featuresFilter(filterCards, 'feature', housingFeatures);
+    window.renderOffers(filterCards);
+    console.log('housingType', filterCards);
   });
+  });
+  function featuresFilter(cards, property, filterFeatures) {
+    var results = [];
+    for (var i = 0; i < cards.length; i++) {
+      var card = cards[i];
+      var cardFeatures = card.offer.features;
+      var found = 0;
+      filterFeatures.map(function (filterFeature) {
+        cardFeatures.map(function (cardFeature) {
+          if (filterFeature === cardFeature) {
+            found++;
+          }
+        });
+      });
+      if (found === filterFeatures.length) {
+        results.push(card);
+      }
+    }
+    return results;
+  }
+  function priceFilter(cards, property, value) {
+    var results = [];
+    var min;
+    var max;
+    switch (value) {
+      case 'low':
+        min = 0;
+        max = 9999;
+        break;
+      case 'middle':
+        min = 10000;
+        max = 49999;
+        break;
+      case 'high':
+        min = 50000;
+        max = Infinity;
+        break;
+    }
+    for (var i = 0; i < cards.length; i++) {
+      var card = cards[i];
+      if (card.offer[property] > min && card.offer[property] < max) {
+        results.push(card);
+      }
+    }
+    return results;
+  }
+  function propertyFilter(cards, property, value) {
+    var results = [];
+    for (var i = 0; i < cards.length; i++) {
+      var card = cards[i];
+      if (value === 'any' || card.offer[property] === value) {
+        results.push(card);
+      }
+    }
+    return results;
+  }
+
+
 
 // Перетаскиваем элемент .main-pin
   var pinContainer = document.querySelector('.tokyo__pin-map');

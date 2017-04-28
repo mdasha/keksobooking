@@ -14,7 +14,6 @@ window.showCard = (function () {
       offerDialog.querySelector('.dialog__title img').src = 'img/main-pin-image.png';
     } else {
       offerDialog.querySelector('.dialog__title img').src = window.cards[(data - 1)].author.avatar;
-      console.log()
     }
   };
   return {
