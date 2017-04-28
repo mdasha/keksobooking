@@ -2,20 +2,13 @@
 (function () {
 
   window.cards = [];
-// Функция для реакции на изменения (фильтры)
-  var updateOffers = function () {
-    window.sameHousingTypes = window.cards.filter(function (it) {
-      return it.offer.type === offerType;
-    });
-    window.renderOffers(window.sameHousingTypes);
-  };
+
 // Загружаем исходные данные с сервера
   window.load(function (data) {
     window.cards = data;
     window.renderOffers(data);
   });
-  // Фильтруем элементы сначала по типу жилья
-  var offerType;
+
   var timeout;
   function debounce(func) {
     if (timeout) {
@@ -26,21 +19,20 @@
   var formFilters = document.querySelector('.tokyo__filters');
   formFilters.addEventListener('change', function () {
     debounce(function () {
-    var formData = new FormData(formFilters);
-    var housingType = formData.get('housing_type');
-    var housingPrice = formData.get('housing_price');
-    var housingRoomNumber = formData.get('housing_room-number');
-    var housingGuestsNumber = formData.get('housing_guests-number');
-    var housingFeatures = formData.getAll('feature');
-    var filterCards = [];
-    filterCards = propertyFilter(window.cards, 'type', housingType);
-    filterCards = priceFilter(filterCards, 'price', housingPrice);
-    filterCards = propertyFilter(filterCards, 'rooms', housingRoomNumber);
-    filterCards = propertyFilter(filterCards, 'guests', housingGuestsNumber);
-    filterCards = featuresFilter(filterCards, 'feature', housingFeatures);
-    window.renderOffers(filterCards);
-    console.log('housingType', filterCards);
-  });
+      var formData = new FormData(formFilters);
+      var housingType = formData.get('housing_type');
+      var housingPrice = formData.get('housing_price');
+      var housingRoomNumber = formData.get('housing_room-number');
+      var housingGuestsNumber = formData.get('housing_guests-number');
+      var housingFeatures = formData.getAll('feature');
+      var filterCards = [];
+      filterCards = propertyFilter(window.cards, 'type', housingType);
+      filterCards = priceFilter(filterCards, 'price', housingPrice);
+      filterCards = propertyFilter(filterCards, 'rooms', housingRoomNumber);
+      filterCards = propertyFilter(filterCards, 'guests', housingGuestsNumber);
+      filterCards = featuresFilter(filterCards, 'feature', housingFeatures);
+      window.renderOffers(filterCards);
+    });
   });
   function featuresFilter(cards, property, filterFeatures) {
     var results = [];
@@ -97,8 +89,6 @@
     }
     return results;
   }
-
-
 
 // Перетаскиваем элемент .main-pin
   var pinContainer = document.querySelector('.tokyo__pin-map');
