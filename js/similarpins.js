@@ -18,8 +18,8 @@
       newElement[i] = document.createElement('div');
       newElement[i].className = 'pin';
       newElement[i].setAttribute('tabindex', '0');
-      newElement[i].style.left = data[i].location.x + 'px';
-      newElement[i].style.top = data[i].location.y + 'px';
+      newElement[i].style.left = data[i].location.x - 29 + 'px';
+      newElement[i].style.top = data[i].location.y - 75 + 'px';
       newElement[i].innerHTML = '<img src="' + data[i].author.avatar + '" class="rounded" width="40" height="40" >';
       window.render[i] = window.render[i].appendChild(newElement[i]);
       firstMark.appendChild(window.render[i]);

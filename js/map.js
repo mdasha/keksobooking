@@ -14,7 +14,7 @@
 // Загружаем исходные данные с сервера
   window.load(function (data) {
     window.cards = data;
-    updateOffers();
+    window.renderOffers(data);
   });
   // Фильтруем элементы сначала по типу жилья
   var offerType;
