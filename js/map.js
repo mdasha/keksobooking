@@ -83,7 +83,8 @@
     var results = [];
     for (var i = 0; i < cards.length; i++) {
       var card = cards[i];
-      if (value === 'any' || card.offer[property] === value) {
+      var cardProperty = card.offer[property].toString();
+      if (value === 'any' || cardProperty === value) {
         results.push(card);
       }
     }

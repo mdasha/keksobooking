@@ -8,6 +8,7 @@
   var dialogPanel = offerDialog.querySelectorAll('.dialog__panel');
   window.render = [];
   window.offerElements = [];
+  window.avatar = [];
   window.offerElements[0] = dialogPanel[0].innerHTML;
   var newElement = [];
   window.renderOffers = function (data) {
@@ -27,6 +28,7 @@
       window.render[i] = window.render[i].appendChild(newElement[i]);
       firstMark.appendChild(window.render[i]);
       window.offerElements[i + 1] = window.pin.createOffers(data[i].offer).childNodes[1].innerHTML;
+      window.avatar[i + 1] = data[i].author.avatar;
     }
     var pins = document.querySelectorAll('.pin');
     // Подключаем модуль отрисковки pin-ов на карте
