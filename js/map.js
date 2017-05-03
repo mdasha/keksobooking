@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-
   var PIN_LENGTH = 75;
   var PIN_LENGTH_HALF = PIN_LENGTH / 2;
   var PIN_HEIGHT = 94;

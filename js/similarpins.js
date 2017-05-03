@@ -28,7 +28,7 @@ window.renderOffers = (function () {
       newElementsArray[i].innerHTML = '<img src="' + data[i].author.avatar + '" class="rounded" width="40" height="40" >';
       window.pinsArray[i] = window.pinsArray[i].appendChild(newElementsArray[i]);
       firstMark.appendChild(window.pinsArray[i]);
-      window.offerElementsArray[i + 1] = window.pin.createOffers(data[i].offer).childNodes[1].innerHTML;
+      window.offerElementsArray[i + 1] = window.pin(data[i].offer).childNodes[1].innerHTML;
       window.avatarsArray[i + 1] = data[i].author.avatar;
     }
     var pins = document.querySelectorAll('.pin');
@@ -60,7 +60,7 @@ window.renderOffers = (function () {
 // Получаем значение атрибута data-index текущего элемента и вызываем функцию, которая меняет данные об объекте и его фотку
       var dataIndexPin = pins.getAttribute('data-index');
 // Подключаем отдельным модулем (cardOffer.js) вызов функции, которая показывает карточку выбранного жилья по нажатию на метку на карте
-      window.cardOffer.openUserDialog(dataIndexPin);
+      window.cardOffer(dataIndexPin);
 // При открытом диалоге клавиша esc закрывает его и деактивирует элемент с классом .pin
       document.addEventListener('keydown', function (evt) {
         if (evt.keyCode === ESC_BUTTON) {

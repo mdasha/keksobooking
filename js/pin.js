@@ -3,7 +3,7 @@ window.pin = (function () {
   var similarOfferTemplate = document.querySelector('#lodge-template').content;
 // Заполнение блока DOM-элементами на основе JS-объектов
 // Создаем элемент на основе шаблона #lodge-template
-  var renderOfferInDialogPanel = function (offer) {
+  return function (offer) {
     var offerElement = similarOfferTemplate.cloneNode(true);
     offerElement.querySelector('.lodge__title').textContent = offer.title;
     offerElement.querySelector('.lodge__address').textContent = offer.address;
@@ -26,27 +26,25 @@ window.pin = (function () {
     offerElement.querySelector('.lodge__rooms-and-guests').textContent = 'Для ' + offer.guests + ' гостей в ' + offer.rooms + ' комнатах';
     offerElement.querySelector('.lodge__checkin-time').textContent = 'Заезд после ' + offer.checkin + ', выезд до ' + offer.checkout;
 // Выводим все доступные удобства из массива offer.features
-    for (var i = 0; i < offer.features.length; i++) {
+    offer.features.forEach(function (offerFeature) {
       var features = document.createElement('span');
-      features.className = 'feature__image feature__image--' + offer.features[i];
+      features.className = 'feature__image feature__image--' + offerFeature;
       offerElement.querySelector('.lodge__features').appendChild(features);
-    }
+    });
+
     offerElement.querySelector('.lodge__description').textContent = offer.description;
 // Добавляем изображения объектов
     var photos = document.createElement('div');
     photos.className = 'lodge__photos';
-    for (i = 0; i < offer.photos.length; i++) {
+    offer.photos.forEach(function (offerPhoto) {
       var photosImg = document.createElement('img');
-      photosImg.src = offer.photos[i];
+      photosImg.src = offerPhoto;
       photosImg.alt = 'Lodge photo';
       photosImg.height = '42';
       photosImg.width = '52';
       offerElement.querySelector('.lodge__photos').appendChild(photosImg);
-    }
+    });
     return offerElement;
-  };
-  return {
-    'createOffers': renderOfferInDialogPanel
   };
 })();
 

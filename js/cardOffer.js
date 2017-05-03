@@ -4,7 +4,7 @@ window.cardOffer = (function () {
   var offerDialog = document.querySelector('#offer-dialog');
   var dialogPanel = offerDialog.querySelectorAll('.dialog__panel');
   var dialogTitle = offerDialog.querySelectorAll('.dialog__title');
-  var openUserDialog = function (data) {
+  return function (data) {
     if (data === '0') {
 // Скрываем аватарку и заглушечную карточку при клике на главный пин
       offerDialog.querySelector('.dialog__title').style.display = 'none';
@@ -17,8 +17,5 @@ window.cardOffer = (function () {
       dialogPanel[0].innerHTML = window.offerElementsArray[data];
       dialogTitle[0].style.display = 'block';
     }
-  };
-  return {
-    openUserDialog: openUserDialog
   };
 })();
