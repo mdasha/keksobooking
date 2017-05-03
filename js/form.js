@@ -7,8 +7,6 @@
   var roomNumber = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
   var form = document.querySelector('.notice__form');
-  var input = form.querySelectorAll('input');
-  var formSubmit = document.querySelector('.form__submit');
   var syncValues = function (element, value) {
     element.value = value;
   };
@@ -41,13 +39,13 @@
     form.reset();
   });
 
-  formSubmit.addEventListener('click', function () {
-    for (var i = 0; i < 2; i++) {
-      if (!input[i].validity.valid) {
-        input[i].classList.add('attention');
-      } else {
-        input[i].classList.remove('attention');
-      }
+  var toggleValidation = function (evt) {
+    if (evt.target.validity.valid) {
+      evt.target.classList.remove('attention');
+    } else {
+      evt.target.classList.add('attention');
     }
-  });
+  };
+  document.getElementById('title').addEventListener('change', toggleValidation);
+  document.getElementById('price').addEventListener('change', toggleValidation);
 })();
