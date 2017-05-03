@@ -12,8 +12,8 @@
   window.load('https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data', function (data) {
     var mainPin = document.querySelector('.pin__main');
     var address = document.querySelector('#address');
-    var mainPinInitialX = parseInt(mainPin.offsetTop, 10) + PIN_LENGTH_HALF;
-    var mainPininitialY = parseInt(mainPin.offsetLeft, 10) + PIN_HEIGHT;
+    var mainPininitialY = parseInt(mainPin.offsetTop, 10) + PIN_HEIGHT;
+    var mainPinInitialX = parseInt(mainPin.offsetLeft, 10) + PIN_LENGTH_HALF;
     address.value = 'x: ' + mainPinInitialX + 'px, y: ' + mainPininitialY + 'рх';
     window.cardsArray = data;
     var initialData = [];
