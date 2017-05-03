@@ -1,7 +1,8 @@
 'use strict';
 (function () {
-  var PIN_LENGTH_HALF = 37.5;
+
   var PIN_LENGTH = 75;
+  var PIN_LENGTH_HALF = PIN_LENGTH / 2;
   var PIN_HEIGHT = 94;
   window.cardsArray = [];
   var offerDialog = document.querySelector('#offer-dialog');
