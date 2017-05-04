@@ -1,21 +1,23 @@
 'use strict';
 (function () {
-  var PIN_LENGTH = 75;
-  var PIN_LENGTH_HALF = PIN_LENGTH / 2;
+  var PIN_WIDTH = 75;
+  var PIN_WIDTH_HALF = PIN_WIDTH / 2;
   var PIN_HEIGHT = 94;
-  window.cardsArray = [];
+  var BACK_IMAGE_WIDTH = 1200;
+  var BACK_IMAGE_HEIGHT = 700;
+  var cardsArray = [];
   var offerDialog = document.querySelector('#offer-dialog');
   offerDialog.querySelector('.dialog__title').style.display = 'none';
   offerDialog.querySelector('.dialog__panel').style.display = 'none';
-
-// Загружаем исходные данные с сервера
+  var mainPin = document.querySelector('.pin__main');
+  mainPin.style.zIndex = '1000';
+  // Загружаем исходные данные с сервера
   window.load('https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data', function (data) {
-    var mainPin = document.querySelector('.pin__main');
     var address = document.querySelector('#address');
     var mainPininitialY = parseInt(mainPin.offsetTop, 10) + PIN_HEIGHT;
-    var mainPinInitialX = parseInt(mainPin.offsetLeft, 10) + PIN_LENGTH_HALF;
+    var mainPinInitialX = parseInt(mainPin.offsetLeft, 10) + PIN_WIDTH_HALF;
     address.value = 'x: ' + mainPinInitialX + 'px, y: ' + mainPininitialY + 'рх';
-    window.cardsArray = data;
+    cardsArray = data;
     var initialData = [];
 
     while (initialData.length < 3) {
@@ -25,7 +27,7 @@
       }
     }
 
-    window.renderOffers(initialData);
+    window.renderPins(initialData);
   }, function onError(xhr) {
     var header = document.querySelector('header');
     var fragment = document.createDocumentFragment();
@@ -47,23 +49,16 @@
   }
 
   var filterFeatures = function (cards, property, featuresFilter) {
-    var resultsArray = [];
-    for (var i = 0; i < cards.length; i++) {
-      var card = cards[i];
+    return cards.filter(function (card) {
       var cardFeatures = card.offer.features;
       var found = 0;
-      featuresFilter.map(function (filterFeature) {
-        cardFeatures.map(function (cardFeature) {
-          if (filterFeature === cardFeature) {
-            found++;
-          }
-        });
+      featuresFilter.forEach(function (filterFeature) {
+        if (cardFeatures.indexOf(filterFeature)) {
+          found++;
+        }
       });
-      if (found === featuresFilter.length) {
-        resultsArray.push(card);
-      }
-    }
-    return resultsArray;
+      return (found === featuresFilter.length);
+    });
   };
 
   var filterPrice = function (cards, property, value) {
@@ -84,24 +79,20 @@
         max = Infinity;
         break;
     }
-    for (var i = 0; i < cards.length; i++) {
-      var card = cards[i];
-      if (card.offer[property] > min && card.offer[property] < max) {
-        resultsArray.push(card);
-      }
-    }
+    resultsArray = cards.filter(function (card) {
+      var cardOffer = card.offer[property];
+      return (cardOffer > min && cardOffer < max);
+    });
+
     return resultsArray;
   };
 
   var filterProperty = function (cards, property, value) {
     var resultsArray = [];
-    for (var i = 0; i < cards.length; i++) {
-      var card = cards[i];
+    resultsArray = cards.filter(function (card) {
       var cardProperty = card.offer[property].toString();
-      if (value === 'any' || cardProperty === value) {
-        resultsArray.push(card);
-      }
-    }
+      return (value === 'any' || cardProperty === value);
+    });
     return resultsArray;
   };
 
@@ -115,27 +106,27 @@
       var housingGuestsNumber = formData.get('housing_guests-number');
       var housingFeatures = formData.getAll('feature');
       var filterCardsArray = [];
-      filterCardsArray = filterProperty(window.cardsArray, 'type', housingType);
+      filterCardsArray = filterProperty(cardsArray, 'type', housingType);
       filterCardsArray = filterPrice(filterCardsArray, 'price', housingPrice);
       filterCardsArray = filterProperty(filterCardsArray, 'rooms', housingRoomNumber);
       filterCardsArray = filterProperty(filterCardsArray, 'guests', housingGuestsNumber);
       filterCardsArray = filterFeatures(filterCardsArray, 'feature', housingFeatures);
-      window.renderOffers(filterCardsArray);
+      window.renderPins(filterCardsArray);
     });
   });
 
 
-// Перетаскиваем элемент .main-pin
+  // Перетаскиваем элемент .main-pin
   var pinContainer = document.querySelector('.tokyo__pin-map');
   var draggedElement = pinContainer.querySelector('.pin__main');
   draggedElement.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
-// Запомним координаты точки, с которой начали движение
+    // Запомним координаты точки, с которой начали движение
     var startCoords = {
       x: evt.clientX,
       y: evt.clientY
     };
-// При каждом движении мыши нам нужно обновлять смещение относительно первоначальной точки, чтобы диалог смещался на необходимую величину
+    // При каждом движении мыши нам нужно обновлять смещение относительно первоначальной точки, чтобы диалог смещался на необходимую величину
     var onMouseMove = function (moveEvt) {
 
       moveEvt.preventDefault();
@@ -149,30 +140,29 @@
         x: moveEvt.clientX,
         y: moveEvt.clientY
       };
-      var BACK_IMAGE_WIDTH = 1200;
-      var BACK_IMAGE_HEIGHT = 700;
+
       var xShift = draggedElement.offsetLeft - shift.x;
       var yShift = draggedElement.offsetTop - shift.y;
-      if (xShift < (BACK_IMAGE_WIDTH - PIN_LENGTH) && xShift > 0) {
+      if (xShift < (BACK_IMAGE_WIDTH - PIN_WIDTH) && xShift > 0) {
         draggedElement.style.left = xShift + 'px';
       }
       if (yShift < (BACK_IMAGE_HEIGHT - PIN_HEIGHT) && yShift > 0) {
         draggedElement.style.top = yShift + 'px';
       }
-// Заполняем поле адреса координатами в зависимости от перемещения .main_pin
-      var newPinX = parseInt(draggedElement.style.left, 10) + PIN_LENGTH_HALF;
+      // Заполняем поле адреса координатами в зависимости от перемещения .main_pin
+      var newPinX = parseInt(draggedElement.style.left, 10) + PIN_WIDTH_HALF;
       var newPinY = parseInt(draggedElement.style.top, 10) + PIN_HEIGHT;
       var address = document.querySelector('#address');
       address.value = 'x: ' + newPinX + 'px, y: ' + newPinY + 'рх';
     };
-// При отпускании кнопки мыши нужно переставать слушать события движения мыши
+    // При отпускании кнопки мыши нужно переставать слушать события движения мыши
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
-// Добавляем обработчики события передвижения мыши и отпускания кнопки мыши
+    // Добавляем обработчики события передвижения мыши и отпускания кнопки мыши
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
