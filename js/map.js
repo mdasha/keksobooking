@@ -28,12 +28,12 @@
     }
 
     window.renderPins(initialData);
-  }, function onError(xhr) {
+  }, function onError(errorMessage) {
     var header = document.querySelector('header');
     var fragment = document.createDocumentFragment();
     var newElement = document.createElement('div');
     newElement.className = 'error';
-    newElement.textContent = 'Произошла ошибка при загрузке данных. Код ошибки:' + xhr.status;
+    newElement.textContent = errorMessage;
     newElement.style.color = 'white';
     newElement.style.backgroundColor = 'red';
     fragment.appendChild(newElement);

@@ -10,14 +10,14 @@ window.load = (function () {
       if (xhr.status === OK_STATUS) {
         onSuccess(xhr.response);
       } else {
-        onError(xhr);
+        onError('Произошла ошибка с кодом ' + xhr.status);
       }
     });
     xhr.addEventListener('error', function () {
-      onError(xhr);
+      onError('Не удалось отправить запрос');
     });
     xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      onError('Запрос не успел выполниться за ' + xhr.timeout + ' мс');
     });
 
     xhr.timeout = TIMEOUT; // 10s
